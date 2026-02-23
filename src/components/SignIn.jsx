@@ -1,16 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const SignIn = ({ setIsAuthenticated, setShowSignUp }) => {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const isValid = email !== "" && password !== "";
-
-  useEffect(() => {
-    console.log("SignIn Re-rendered");
-  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,44 +19,46 @@ const SignIn = ({ setIsAuthenticated, setShowSignUp }) => {
     ) {
       setIsAuthenticated(true);
     } else {
-      setError("Invalid Credentials");
+      setError("Invalid Email or Password");
     }
   };
 
   return (
     <div>
-      <h2>Sign In</h2>
+      <h2>Welcome Back</h2>
+      <p className="subtitle">Sign in to continue to your account</p>
 
       <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <br /><br />
+        <div className="input-group">
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => { setEmail(e.target.value); setError(""); }}
+          />
+        </div>
 
-        <input
-          type="password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br /><br />
+        <div className="input-group">
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => { setPassword(e.target.value); setError(""); }}
+          />
+        </div>
+
+        {error && <p className="error-message">{error}</p>}
 
         <button type="submit" disabled={!isValid}>
-          Login
+          Sign In
         </button>
-
-        <p style={{ color: "red" }}>{error}</p>
       </form>
 
-      <p onClick={() => setShowSignUp(true)} style={{ cursor: "pointer", color: "blue" }}>
-        Don't have an account? Sign Up
+      <p className="switch-mode">
+        Don't have an account? <span onClick={() => setShowSignUp(true)}>Sign Up</span>
       </p>
     </div>
   );
 };
 
 export default SignIn;
-
