@@ -1,62 +1,42 @@
 import { useState } from "react";
 
-const SignIn = ({ setIsAuthenticated, setShowSignUp }) => {
+const SignIn = ({ registeredUser, setIsAuthenticated, setShowSignUp }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const isValid = email !== "" && password !== "";
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const storedUser = JSON.parse(localStorage.getItem("registeredUser"));
-
-    if (
-      storedUser &&
-      storedUser.email === email &&
-      storedUser.password === password
-    ) {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setError("");
+    if (!registeredUser) {
+      setError("No demo account yet. Create an account first.");
+      return;
+    }
+    if (registeredUser.email.toLowerCase() === email.trim().toLowerCase() && registeredUser.password === password) {
       setIsAuthenticated(true);
     } else {
-      setError("Invalid Email or Password");
+      setError("Email or password does not match this demo session.");
     }
   };
 
   return (
     <div>
-      <h2>Welcome Back</h2>
-      <p className="subtitle">Sign in to continue to your account</p>
-
+      <p className="eyebrow">WELCOME BACK</p>
+      <h1>Sign in</h1>
+      <p className="subtitle">Continue to your workspace.</p>
       <form onSubmit={handleSubmit}>
         <div className="input-group">
-          <input
-            type="email"
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => { setEmail(e.target.value); setError(""); }}
-          />
+          <label htmlFor="signin-email">Email address</label>
+          <input id="signin-email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(event) => { setEmail(event.target.value); setError(""); }} required />
         </div>
-
         <div className="input-group">
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => { setPassword(e.target.value); setError(""); }}
-          />
+          <label htmlFor="signin-password">Password</label>
+          <input id="signin-password" type="password" autoComplete="current-password" placeholder="Enter your password" value={password} onChange={(event) => { setPassword(event.target.value); setError(""); }} required />
         </div>
-
-        {error && <p className="error-message">{error}</p>}
-
-        <button type="submit" disabled={!isValid}>
-          Sign In
-        </button>
+        {error && <p className="error-message" role="alert">{error}</p>}
+        <button type="submit">Sign in <span aria-hidden="true">→</span></button>
       </form>
-
-      <p className="switch-mode">
-        Don't have an account? <span onClick={() => setShowSignUp(true)}>Sign Up</span>
-      </p>
+      <p className="switch-mode">New here? <button className="text-button" type="button" onClick={() => setShowSignUp(true)}>Create an account</button></p>
     </div>
   );
 };

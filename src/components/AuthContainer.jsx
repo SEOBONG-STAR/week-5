@@ -9,22 +9,22 @@ const AuthContainer = () => {
   const [showSignUp, setShowSignUp] = useState(false);
 
   return (
-    <div className="glass-container">
-      {isAuthenticated ? (
-        <Dashboard setIsAuthenticated={setIsAuthenticated} />
-      ) : showSignUp ? (
-        <SignUp
-          setRegisteredUser={setRegisteredUser}
-          setShowSignUp={setShowSignUp}
-        />
-      ) : (
-        <SignIn
-          registeredUser={registeredUser}
-          setIsAuthenticated={setIsAuthenticated}
-          setShowSignUp={setShowSignUp}
-        />
-      )}
-    </div>
+    <main className="auth-shell">
+      <header className="brand">
+        <span className="brand-mark">A</span>
+        <div><strong>Access UI</strong><span>React authentication demo</span></div>
+      </header>
+      <section className="glass-container">
+        {isAuthenticated ? (
+          <Dashboard setIsAuthenticated={setIsAuthenticated} user={registeredUser} />
+        ) : showSignUp ? (
+          <SignUp setRegisteredUser={setRegisteredUser} setShowSignUp={setShowSignUp} />
+        ) : (
+          <SignIn registeredUser={registeredUser} setIsAuthenticated={setIsAuthenticated} setShowSignUp={setShowSignUp} />
+        )}
+      </section>
+      <p className="security-note">Demo only · Account data stays in memory and is cleared on refresh.</p>
+    </main>
   );
 };
 
